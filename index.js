@@ -14,6 +14,7 @@ const videoInfoBox = Gui(blessed, screen).VideoInfoBox()
 
 ScreenHandle(screen, {searchBox, listBox});
 
+let vid = null;
 
 // Handle Api
 
@@ -36,8 +37,27 @@ getApi.on('message', (message)=>{
                 console.log(message.data);
             }
         }break;
+
+        case 'info':{
+            const {statistics, snippet} = message.data;
+            const {viewCount, likeCount, dislikeCount} = statistics;
+            const {title, channelTitle} = snippet;
+            videoInfoBox.setContent('');
+            videoInfoBox.insertTop([
+                `Title: ${title}`,
+                `Channel title: ${channelTitle}`,
+                `Views: ${viewCount}`,
+                `Likes: ${likeCount}`,
+                `Dislikes: ${dislikeCount}`
+            ]);
+            screen.render();
+        }
     }
     
+});
+
+getApi.stderr.on('data', (err)=>{
+    console.log('Api error: ' + err);
 });
 
 
@@ -46,7 +66,8 @@ getApi.on('message', (message)=>{
 listBox.on('select', (item)=>{
     if(item !== undefined){
         const videoId = item.getText().split('=')[1];
-        getApi.send({name: 'play', data: videoId});
+        vid = videoId;
+        getApi.send({name: 'info', data: videoId});
     }
 });
 
@@ -54,10 +75,11 @@ listBox.key('esc', (ch, key)=>{
     listBox.blur();
 });
 
-listBox.key('enter', (ch, key)=>{
-    
+listBox.key('p', (ch, key)=>{
+    if(vid !== null){
+        getApi.send({name: 'play', data: vid});
+    }
 });
-
 
 // SearchBox events
 
