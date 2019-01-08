@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Video App</title>
+</head>
+<body>
+    <video src="" controls loop></video>
+    <script>
+        const {ipcRenderer} = require('electron');
+        const video = document.querySelector('video');
+
+        ipcRenderer.on('url', (event, data)=>{    
+            video.src = data;
+            document.onkeydown = (event)=>{
+                switch (event.keyCode){
+                    case 32:{
+                        video.play();
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>
