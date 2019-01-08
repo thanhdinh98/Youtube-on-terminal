@@ -1,7 +1,7 @@
 const blessed = require('blessed');
 const {fork, spawn} = require('child_process');
 const {Gui, ScreenHandle} = require('./gui');
-const getApi = fork('./getApi.js', [], {silent: true});
+const getApi = fork('./getApi.js', [process.argv[2]], {silent: true});
 
 const screen = blessed.screen({
     smartCSR: true,

@@ -1,6 +1,6 @@
 const {google} = require('googleapis');
 const request = require('request-promise');
-const Youtube = google.youtube({version: 'v3', auth: 'AIzaSyAeTt9KhY7dd8OmCDikWsFaUGA8a0hsrCI'});
+const Youtube = google.youtube({version: 'v3', auth: process.argv[2]});
 
 process.on('message', async (message)=>{
 
