@@ -1,7 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 
 app.on('ready', ()=>{
-    const win = new BrowserWindow({show: false, width: 560, height: 380});
+    const win = new BrowserWindow({show: false, width: 560, height: 390});
     win.setMenuBarVisibility(false);
 
     win.loadURL(`file://${__dirname}/index.html`);

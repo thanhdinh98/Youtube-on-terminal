@@ -22,17 +22,19 @@ process.on('message', async (message)=>{
         }break;
 
         case 'play':{
-            const options = {
-                uri: `https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=${message.data}`,
-                json: true
-            };
+            // const options = {
+            //     uri: `https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=${message.data}`,
+            //     json: true
+            // };
 
-            try{
-                const response = await request(options);
-                process.send({name: 'play', data: response[0].url});    
-            }catch(err){
-                throw err;
-            }
+            // try{
+            //     const response = await request(options);
+            //     process.send({name: 'play', data: response[0].url});    
+            // }catch(err){
+            //     throw err;
+            // }
+
+            process.send({name: 'play', data: message.data})
         }break;
 
         case 'info':{

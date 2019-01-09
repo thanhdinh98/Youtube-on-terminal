@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron videoApp.js"
   },
-  "author": "",
+  "author": "Thanh Dinh",
   "license": "ISC",
   "dependencies": {
     "blessed": "^0.1.81",
