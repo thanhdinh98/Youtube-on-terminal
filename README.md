@@ -11,8 +11,16 @@
 git clone https://github.com/thanhdinh98/Youtube-on-terminal.git
 
 cd Youtube-on-terminal && npm install
+```
 
+```sh
 node index your_youtube_api_key
+```
+
+Or set your alias command
+
+```sh
+alias s='cd ~/path/to/clone/folder && node index your_api_key && cd ~/'
 ```
 
 **Note**: Create your own Youtube ApiKey on [Google Console](https://console.developers.google.com)
