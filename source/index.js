@@ -9,8 +9,9 @@ const screen = blessed.screen({
 });
 
 const searchBox = Gui(blessed, screen).SearchBox();
-const listBox = Gui(blessed, screen).ResultBox()
-const videoInfoBox = Gui(blessed, screen).VideoInfoBox()
+const listBox = Gui(blessed, screen).ResultBox();
+const videoInfoBox = Gui(blessed, screen).VideoInfoBox();
+const loading = Gui(blessed, screen).Loading();
 
 ScreenHandle(screen, {searchBox, listBox});
 
@@ -51,7 +52,17 @@ getApi.on('message', (message)=>{
                 `Dislikes: ${dislikeCount}`
             ]);
             screen.render();
-        }
+        }break;
+
+        case 'load':{
+            if(message.data){
+                loading.setContent('Loading...');
+                screen.render();
+            }else{
+                loading.setContent('');
+                screen.render();
+            }
+        }break;
     }
     
 });

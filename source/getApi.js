@@ -1,5 +1,6 @@
 const {google} = require('googleapis');
 const request = require('request-promise');
+const {Parser} = require(`${__dirname}/youtubeParser`);
 const Youtube = google.youtube({version: 'v3', auth: process.argv[2]});
 
 process.on('message', async (message)=>{
@@ -14,7 +15,9 @@ process.on('message', async (message)=>{
             }
         
             try{
+                process.send({name: 'load', data: true});
                 const response =  await Youtube.search.list(options);
+                process.send({name: 'load', data: false});
                 process.send({name: 'search', data: response.data.items});
             }catch(err){
                 throw err;
@@ -22,19 +25,15 @@ process.on('message', async (message)=>{
         }break;
 
         case 'play':{
-            // const options = {
-            //     uri: `https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=${message.data}`,
-            //     json: true
-            // };
+            try{
 
-            // try{
-            //     const response = await request(options);
-            //     process.send({name: 'play', data: response[0].url});    
-            // }catch(err){
-            //     throw err;
-            // }
+                process.send({name: 'load', data: true});
+                const url = await Parser(message.data);
+                process.send({name: 'load', data: false});
+                process.send({name: 'play', data: url})
 
-            process.send({name: 'play', data: message.data})
+            }catch(err){throw err;}
+
         }break;
 
         case 'info':{
@@ -44,7 +43,9 @@ process.on('message', async (message)=>{
             };
 
             try{
+                process.send({name: 'load', data: true});
                 const response = await Youtube.videos.list(options);
+                process.send({name: 'load', data: false});
                 process.send({name: 'info', data: response.data.items[0]});
             }catch(err){
                 throw err;

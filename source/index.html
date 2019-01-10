@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Video App</title>
+</head>
+<body>
+    <video src="" controls loop style='width: 100%; height: auto;'></video>
+    <!-- <webview src='' style='height: 370px'></webview> -->
+    <script>
+        const {ipcRenderer} = require('electron');
+        const video = document.querySelector('video');
+        // const webview = document.querySelector('webview');
+
+        ipcRenderer.on('url', (event, data)=>{    
+            video.src = data;
+            document.onkeydown = (event)=>{
+                switch (event.keyCode){
+                    case 32:{
+                        if(video.paused) video.play();
+                        else video.pause();
+                    }
+                }
+            }
+
+            // webview.src = `https://www.youtube.com/embed/${data}`;
+        });
+
+    </script>
+</body>
+</html>

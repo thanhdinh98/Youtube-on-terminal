@@ -55,10 +55,20 @@ const Gui = (blessed, screen)=>{
         });
     }
 
+    function Loading(){
+        return blessed.box({
+            parent: screen,
+            right: 0,
+            height: '15%',
+            width: '30%'
+        });
+    }
+
     return {
         SearchBox,
         ResultBox,
-        VideoInfoBox
+        VideoInfoBox,
+        Loading
     }
 }
 
