@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const queryString = require('querystring');
 
-const Parser = async (videoId, apiKey)=>{
+const Parser = async (videoId)=>{
     try{
         const embedFileResponse = await fetch(`https://www.youtube.com/embed/${videoId}`, {mode: 'no-cors'});
         const embedFile = await embedFileResponse.text();
@@ -25,7 +25,17 @@ const Parser = async (videoId, apiKey)=>{
             );  
         }
 
-        return streamMap.url[0];
+        for(let url of streamMap.url){
+            if(queryString.parse(url, null, null)['itag'] == '18'){
+                const errPath = url.indexOf(',type=');
+                return url.substring(
+                    0,
+                    errPath !== -1 ? errPath : url.length
+                )
+            };
+        }
+
+        return null;
     }catch(err){throw err;}
 }
 

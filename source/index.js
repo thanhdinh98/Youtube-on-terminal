@@ -11,9 +11,9 @@ const screen = blessed.screen({
 const searchBox = Gui(blessed, screen).SearchBox();
 const listBox = Gui(blessed, screen).ResultBox();
 const videoInfoBox = Gui(blessed, screen).VideoInfoBox();
-const loading = Gui(blessed, screen).Loading();
+const statusBox = Gui(blessed, screen).StatusBox();
 
-ScreenHandle(screen, {searchBox, listBox});
+ScreenHandle(screen, {searchBox, listBox, videoInfoBox});
 
 let vid = null;
 
@@ -32,10 +32,11 @@ getApi.on('message', (message)=>{
         }break;
 
         case 'play':{
-            if(message.data !== undefined){
+            if(message.data){
                 spawn('npm', ['start', '--', message.data]);
             }else{
-                console.log(message.data);
+                statusBox.setContent('Can not find video.');
+                screen.render();
             }
         }break;
 
@@ -54,12 +55,12 @@ getApi.on('message', (message)=>{
             screen.render();
         }break;
 
-        case 'load':{
-            if(message.data){
-                loading.setContent('Loading...');
+        case 'status':{
+            if(message.data.loading){
+                statusBox.setContent('Loading...');
                 screen.render();
             }else{
-                loading.setContent('');
+                statusBox.setContent('');
                 screen.render();
             }
         }break;

@@ -55,7 +55,7 @@ const Gui = (blessed, screen)=>{
         });
     }
 
-    function Loading(){
+    function StatusBox(){
         return blessed.box({
             parent: screen,
             right: 0,
@@ -68,7 +68,7 @@ const Gui = (blessed, screen)=>{
         SearchBox,
         ResultBox,
         VideoInfoBox,
-        Loading
+        StatusBox
     }
 }
 
@@ -87,6 +87,8 @@ const ScreenHandle = (screen, components)=>{
 
     screen.key('c', (ch, key)=>{
         components['listBox'].clearItems();
+        components['videoInfoBox'].setContent('');
+        screen.render();
     });
 }
 

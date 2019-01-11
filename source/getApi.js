@@ -15,9 +15,11 @@ process.on('message', async (message)=>{
             }
         
             try{
-                process.send({name: 'load', data: true});
+                process.send({name: 'status', data: {loading: true}});
+
                 const response =  await Youtube.search.list(options);
-                process.send({name: 'load', data: false});
+
+                process.send({name: 'status', data: {loading: false}});
                 process.send({name: 'search', data: response.data.items});
             }catch(err){
                 throw err;
@@ -27,11 +29,12 @@ process.on('message', async (message)=>{
         case 'play':{
             try{
 
-                process.send({name: 'load', data: true});
-                const url = await Parser(message.data);
-                process.send({name: 'load', data: false});
-                process.send({name: 'play', data: url})
+                process.send({name: 'status', data: {loading: true}});
 
+                const url = await Parser(message.data);
+
+                process.send({name: 'status', data: {loading: false}});
+                process.send({name: 'play', data: url});
             }catch(err){throw err;}
 
         }break;
@@ -43,9 +46,11 @@ process.on('message', async (message)=>{
             };
 
             try{
-                process.send({name: 'load', data: true});
+                process.send({name: 'status', data: {loading: true}});
+
                 const response = await Youtube.videos.list(options);
-                process.send({name: 'load', data: false});
+
+                process.send({name: 'status', data: {loading: false}});
                 process.send({name: 'info', data: response.data.items[0]});
             }catch(err){
                 throw err;
