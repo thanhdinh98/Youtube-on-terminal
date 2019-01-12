@@ -16,6 +16,7 @@ const statusBox = Gui(blessed, screen).StatusBox();
 ScreenHandle(screen, {searchBox, listBox, videoInfoBox});
 
 let vid = null;
+let vidTitle = null;
 
 // Handle Api
 
@@ -33,7 +34,7 @@ getApi.on('message', (message)=>{
 
         case 'play':{
             if(message.data){
-                spawn('npm', ['start', '--', message.data]);
+                spawn('npm', ['start', '--', JSON.stringify(message.data)]);
             }else{
                 statusBox.setContent('Can not find video.');
                 screen.render();
@@ -44,6 +45,7 @@ getApi.on('message', (message)=>{
             const {statistics, snippet} = message.data;
             const {viewCount, likeCount, dislikeCount} = statistics;
             const {title, channelTitle} = snippet;
+            vidTitle = title;
             videoInfoBox.setContent('');
             videoInfoBox.insertTop([
                 `Title: ${title}`,
@@ -89,7 +91,7 @@ listBox.key('esc', (ch, key)=>{
 
 listBox.key('p', (ch, key)=>{
     if(vid !== null){
-        getApi.send({name: 'play', data: vid});
+        getApi.send({name: 'play', data: {vid, vidTitle}});
     }
 });
 

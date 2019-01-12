@@ -12,29 +12,30 @@ const Parser = async (videoId)=>{
 
         let metaDataResponse = await fetch(`https://www.youtube.com/get_video_info?video_id=${videoId}&sts=${embedFileInfo.sts}`, {mode: 'no-cors'});
         let metaData = await metaDataResponse.text();
-        let streamMap = queryString.parse(
-            queryString.parse(metaData, null, null).url_encoded_fmt_stream_map,
-            null, null
-        );
-        if(streamMap = '{}'){
+        
+        const metaDataJson = queryString.parse(metaData, null, null);
+        let streamMap = null;
+
+        if(metaDataJson.status === 'fail'){
             metaDataResponse = await fetch(`https://www.youtube.com/get_video_info?video_id=${videoId}&sts=${embedFileInfo.sts}&el=detailpage`, {mode: 'no-cors'});
             metaData = await metaDataResponse.text();
             streamMap = queryString.parse(
                 queryString.parse(metaData, null, null).url_encoded_fmt_stream_map,
                 null, null
             );  
+        }else{
+            streamMap = queryString.parse(
+                metaDataJson.url_encoded_fmt_stream_map,
+                null, null
+            );
         }
 
         for(let url of streamMap.url){
             if(queryString.parse(url, null, null)['itag'] == '18'){
                 const errPath = url.indexOf(',type=');
-                return url.substring(
-                    0,
-                    errPath !== -1 ? errPath : url.length
-                )
-            };
+                return errPath !== -1 ? url.substring(0, errPath) : url;
+            }
         }
-
         return null;
     }catch(err){throw err;}
 }

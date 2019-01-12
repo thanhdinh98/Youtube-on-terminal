@@ -28,13 +28,14 @@ process.on('message', async (message)=>{
 
         case 'play':{
             try{
+                const {vid, vidTitle} = message.data;
 
                 process.send({name: 'status', data: {loading: true}});
 
-                const url = await Parser(message.data);
+                const url = await Parser(vid);
 
                 process.send({name: 'status', data: {loading: false}});
-                process.send({name: 'play', data: url});
+                process.send({name: 'play', data: {url, vidTitle}});
             }catch(err){throw err;}
 
         }break;
